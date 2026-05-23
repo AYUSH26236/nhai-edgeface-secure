@@ -1,4 +1,3 @@
-# nhai-edgeface-secure
 # NHAI EdgeFace Secure
 
 Offline facial recognition and liveness verification module for NHAI DataLake 3.0.
