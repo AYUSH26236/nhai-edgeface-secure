@@ -1,7 +1,7 @@
 import * as blazeface from
 "@tensorflow-models/blazeface";
 
-export interface DetectionResult {
+export interface DetectionResult{
 
  faceFound:boolean;
 
@@ -19,11 +19,15 @@ export interface DetectionResult {
 
 }
 
-export class BlazeFaceDetector {
+export class BlazeFaceDetector{
 
  private model:any;
 
  async loadModel(){
+
+  console.log(
+   "Loading BlazeFace..."
+  );
 
   this.model=
   await blazeface.load();
@@ -32,6 +36,7 @@ export class BlazeFaceDetector {
 
  async detect(
   image:any
+
  ):Promise<DetectionResult>{
 
   if(
@@ -49,41 +54,22 @@ export class BlazeFaceDetector {
    false
   );
 
-  if(
-   predictions.length===0
-  ){
-
-   return{
-
-    faceFound:false,
-
-    faceCount:0,
-
-    confidence:0,
-
-    x:0,
-
-    y:0,
-
-    width:0,
-
-    height:0
-
-   };
-
-  }
-
-  const face=
-  predictions[0];
+  console.log(
+   predictions
+  );
 
   return{
 
-   faceFound:true,
+   faceFound:
+   predictions.length>0,
 
    faceCount:
    predictions.length,
 
-   confidence:1,
+   confidence:
+   predictions.length
+   ?1
+   :0,
 
    x:0,
 

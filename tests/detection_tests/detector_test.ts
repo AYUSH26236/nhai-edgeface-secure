@@ -2,7 +2,7 @@ import {
  BlazeFaceDetector
 }
 from
-"../../app/ai/detection/blazeface/detector";
+"../../app/ai/detection/blazeface/detector.ts";
 
 async function run(){
 
@@ -10,10 +10,9 @@ async function run(){
  new BlazeFaceDetector();
 
  await detector.loadModel();
-
- console.log(
- "BlazeFace loaded"
- );
+console.log(
+"Detector test placeholder"
+);
 
 }
 
