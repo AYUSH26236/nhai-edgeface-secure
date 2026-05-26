@@ -1,72 +1,100 @@
+import * as blazeface from
+"@tensorflow-models/blazeface";
+
 export interface DetectionResult {
 
-    faceFound:boolean;
+ faceFound:boolean;
 
-    faceCount:number;
+ faceCount:number;
 
-    confidence:number;
+ confidence:number;
 
-    x:number;
+ x:number;
 
-    y:number;
+ y:number;
 
-    width:number;
+ width:number;
 
-    height:number;
+ height:number;
 
 }
 
 export class BlazeFaceDetector {
 
-    private modelLoaded=false;
+ private model:any;
 
-    async loadModel():
-    Promise<boolean>{
+ async loadModel(){
 
-        console.log(
-            "Loading BlazeFace..."
-        );
+  this.model=
+  await blazeface.load();
 
-        this.modelLoaded=true;
+ }
 
-        return this.modelLoaded;
+ async detect(
+  image:any
+ ):Promise<DetectionResult>{
 
-    }
+  if(
+   !this.model
+  ){
 
-    async detect(
-        image:string
-    ):Promise<DetectionResult>{
+   await this.loadModel();
 
-        if(
-            !this.modelLoaded
-        ){
+  }
 
-            await this.loadModel();
+  const predictions=
+  await this.model
+  .estimateFaces(
+   image,
+   false
+  );
 
-        }
+  if(
+   predictions.length===0
+  ){
 
-        console.log(
-            "Running face detection"
-        );
+   return{
 
-        return{
+    faceFound:false,
 
-            faceFound:false,
+    faceCount:0,
 
-            faceCount:0,
+    confidence:0,
 
-            confidence:0,
+    x:0,
 
-            x:0,
+    y:0,
 
-            y:0,
+    width:0,
 
-            width:0,
+    height:0
 
-            height:0
+   };
 
-        };
+  }
 
-    }
+  const face=
+  predictions[0];
+
+  return{
+
+   faceFound:true,
+
+   faceCount:
+   predictions.length,
+
+   confidence:1,
+
+   x:0,
+
+   y:0,
+
+   width:0,
+
+   height:0
+
+  };
+
+ }
 
 }
