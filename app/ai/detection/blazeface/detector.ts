@@ -1,45 +1,72 @@
 export interface DetectionResult {
 
- faceFound:boolean;
+    faceFound:boolean;
 
- faceCount:number;
+    faceCount:number;
 
- confidence:number;
+    confidence:number;
 
- x:number;
+    x:number;
 
- y:number;
+    y:number;
 
- width:number;
+    width:number;
 
- height:number;
+    height:number;
 
 }
 
 export class BlazeFaceDetector {
 
- async detect(
-  image:string
- ):Promise<DetectionResult>{
+    private modelLoaded=false;
 
-  return {
+    async loadModel():
+    Promise<boolean>{
 
-   faceFound:false,
+        console.log(
+            "Loading BlazeFace..."
+        );
 
-   faceCount:0,
+        this.modelLoaded=true;
 
-   confidence:0,
+        return this.modelLoaded;
 
-   x:0,
+    }
 
-   y:0,
+    async detect(
+        image:string
+    ):Promise<DetectionResult>{
 
-   width:0,
+        if(
+            !this.modelLoaded
+        ){
 
-   height:0
+            await this.loadModel();
 
-  };
+        }
 
- }
+        console.log(
+            "Running face detection"
+        );
+
+        return{
+
+            faceFound:false,
+
+            faceCount:0,
+
+            confidence:0,
+
+            x:0,
+
+            y:0,
+
+            width:0,
+
+            height:0
+
+        };
+
+    }
 
 }
