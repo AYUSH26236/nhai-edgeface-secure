@@ -2033,7 +2033,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBLazyVector: baf9d0492aa305444465c798e972f87e6a60dc69
-  hermes-engine: c6631aa7905ace223dafa1e56bca15c79d67fcc5
+  hermes-engine: 040761e8e8bbb2d42c7d4bc7d17e4535a6109295
   NitroModules: a2bc6ad3bc42509d2262c91d83cc28396413584c
   RCTDeprecation: 7489702d717ceea80e271eeacb3fbca39fa3c056
   RCTRequired: 1cceac389e77dc5826c681cb782d864b0ed623fc
@@ -2105,7 +2105,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: e96e93b493d8d86eeaee3e590ba0be53f6abe46f
   ReactCodegen: 2701033208d8c8055a75be97727fefcb56bf6d3d
   ReactCommon: 72fd7add948b85461e4af21da4451d0c6f1fea5d
-  ReactNativeDependencies: 8990d13ecce08b6546dc8808fd482bbbf535504e
+  ReactNativeDependencies: 658396914755ba770f29a79af587e0a6864ff28b
   VisionCamera: ed3aea695b0e4818e7103e6583c51b63f9e49a10
   Yoga: 447c8baf495b8d96457a46e6691a2c9952cbd07f
 
