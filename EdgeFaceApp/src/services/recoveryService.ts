@@ -6,7 +6,7 @@ from "../types/recovery";
 export class RecoveryService {
 
  async recover(
-  image:string
+  _images:string[]
  ):Promise<RecoveryResult>{
 
   return {

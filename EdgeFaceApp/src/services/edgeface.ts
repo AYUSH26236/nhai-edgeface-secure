@@ -1,64 +1,54 @@
-import { AuthResult } from "../types/auth";
-import { Worker } from "../types/worker";
-import { SyncResult } from "../types/sync";
+import { AuthResult } from '../types/auth';
+import { Worker } from '../types/worker';
+import { SyncResult } from '../types/sync';
 
 export class EdgeFaceService {
 
- async authenticate(
-  image:string
- ):Promise<AuthResult>{
+  async authenticate(
+    _image: string
+  ): Promise<AuthResult> {
 
-  return {
+    console.log('Starting authentication');
 
-   matched:false,
+    return {
 
-   workerId:"",
+      success: false,
 
-   workerName:"",
+      state: 'unknown',
 
-   confidence:0,
+      confidence: 0,
 
-   livenessPass:false,
+      workerId: undefined,
 
-   decision:"UNKNOWN",
+      message: 'No match found',
 
-   timestamp:new Date()
-    .toISOString()
+    };
+  }
 
-  };
+  async enrollWorker(
+    _images: string[],
+    worker: Worker
+  ): Promise<void> {
 
- }
+    console.log(
+      'Enrollment pending',
+      worker
+    );
+  }
 
- async enrollWorker(
-  images:string[],
+  async syncToAWS():
+    Promise<SyncResult> {
 
-  worker:Worker
+    return {
 
- ):Promise<void>{
+      uploaded: 0,
 
-  console.log(
-   "Enrollment pending",
-   worker
-  );
+      purged: 0,
 
- }
+      pending: 0,
 
- async syncToAWS():
+      success: false,
 
- Promise<SyncResult>{
-
-  return {
-
-   uploaded:0,
-
-   purged:0,
-
-   pending:0,
-
-   success:false
-
-  };
-
- }
-
+    };
+  }
 }

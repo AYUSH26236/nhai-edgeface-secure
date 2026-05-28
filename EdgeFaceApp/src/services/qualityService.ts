@@ -1,36 +1,17 @@
-import {
- QualityResult
-}
-from "../types/quality";
-
 export class QualityService {
 
- async checkQuality(
-  image:string
- ):Promise<QualityResult>{
+  async checkQuality(
+    _image: string,
+  ) {
 
-  return {
+    return {
 
-   blurPass:true,
+      passed: true,
 
-   lightingPass:true,
+      blurScore: 0.95,
 
-   occlusionPass:true,
+      lightingScore: 0.92,
 
-   posePass:true,
-
-   faceSizePass:true,
-
-   blurScore:1,
-
-   lightingScore:1,
-
-   occlusionScore:1,
-
-   poseScore:1
-
-  };
-
- }
-
+    };
+  }
 }

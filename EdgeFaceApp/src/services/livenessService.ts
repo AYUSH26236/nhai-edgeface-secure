@@ -1,31 +1,27 @@
 import {
- LivenessResult
-}
-from "../types/liveness";
+  LivenessResult,
+} from '../types/liveness';
 
 export class LivenessService {
 
- async checkLiveness(
-  image:string
- ):Promise<LivenessResult>{
+  async checkLiveness(
+    _image: string,
+  ): Promise<LivenessResult> {
 
-  return {
+    return {
 
-   blinkPass:true,
+      blinkPass: true,
 
-   smilePass:true,
+      smilePass: true,
 
-   headTurnPass:true,
+      headTurnPass: true,
 
-   challengePass:true,
+      challengePass: true,
 
-   challengeType:
-   "BLINK",
+      challengeType: 'BLINK',
 
-   duration:0
+      duration: 0,
 
-  };
-
- }
-
+    };
+  }
 }

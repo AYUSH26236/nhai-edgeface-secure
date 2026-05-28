@@ -1,22 +1,22 @@
-export type AuthDecision =
-  | "APPROVED"
-  | "REJECTED"
-  | "UNKNOWN";
+export type AuthState =
+  | 'idle'
+  | 'detecting'
+  | 'quality_check'
+  | 'liveness'
+  | 'recognizing'
+  | 'authenticated'
+  | 'unknown'
+  | 'failed';
 
 export interface AuthResult {
 
-  matched: boolean;
+  success: boolean;
 
-  workerId: string;
+  state: AuthState;
 
-  workerName: string;
+  confidence?: number;
 
-  confidence: number;
+  workerId?: string;
 
-  livenessPass: boolean;
-
-  decision: AuthDecision;
-
-  timestamp: string;
-
+  message?: string;
 }

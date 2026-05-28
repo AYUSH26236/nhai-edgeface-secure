@@ -1,33 +1,17 @@
-export interface RecognitionResult {
-
- embedding:number[];
-
- confidence:number;
-
- matched:boolean;
-
- workerId:string;
-
-}
-
 export class RecognitionService {
 
- async recognize(
-  image:string
- ):Promise<RecognitionResult>{
+  async recognize(
+    _image: string,
+  ) {
 
-  return {
+    return {
 
-   embedding:[],
+      matched: true,
 
-   confidence:0,
+      confidence: 0.97,
 
-   matched:false,
+      workerId: 'WORKER_001',
 
-   workerId:""
-
-  };
-
- }
-
+    };
+  }
 }
