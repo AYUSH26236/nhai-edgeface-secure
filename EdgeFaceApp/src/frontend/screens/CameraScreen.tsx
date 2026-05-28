@@ -17,12 +17,19 @@ import {
 
 export default function CameraScreen() {
 
-  const device =
+  const frontDevice =
     useCameraDevice('front');
 
-  const [hasPermission,
-    setHasPermission] =
-    useState(false);
+  const backDevice =
+    useCameraDevice('back');
+
+  const device =
+    frontDevice || backDevice;
+
+  const [
+    hasPermission,
+    setHasPermission,
+  ] = useState(false);
 
   useEffect(() => {
 
@@ -31,9 +38,13 @@ export default function CameraScreen() {
       const permission =
         await Camera.requestCameraPermission();
 
+      console.log(
+        'Camera Permission:',
+        permission,
+      );
+
       setHasPermission(
-        permission ===
-        'granted',
+        permission === 'granted',
       );
     }
 
@@ -75,7 +86,7 @@ export default function CameraScreen() {
         <Text
           style={styles.loading}
         >
-          Loading Camera...
+          No camera device found
         </Text>
 
       </View>
