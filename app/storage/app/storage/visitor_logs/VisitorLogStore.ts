@@ -1,3 +1,4 @@
+import { addVisitorLog } from "../../../app/storage/app/storage/visitor_logs/VisitorLogStore";
 export type VisitorLogInput = {
   name: string;
   company?: string;
