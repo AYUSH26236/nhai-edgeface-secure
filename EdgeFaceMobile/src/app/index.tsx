@@ -18,7 +18,7 @@ type VisitorLog = {
   status: "QUEUED_FOR_SYNC";
 };
 
-type Screen = "home" | "visitor" | "sync" | "auth";
+type Screen = "home" | "visitor" | "sync" | "auth" | "policy";
 
 export default function HomeScreen() {
   const [screen, setScreen] = useState<Screen>("home");
@@ -26,6 +26,7 @@ export default function HomeScreen() {
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [purpose, setPurpose] = useState("");
   const [pendingLogs, setPendingLogs] = useState(0);
+  const [lastSyncTime, setLastSyncTime] = useState("Never");
   const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>([]);
   const [authSteps, setAuthSteps] = useState<string[]>([]);
 
@@ -56,7 +57,12 @@ export default function HomeScreen() {
 
   const syncLogs = () => {
     setPendingLogs(0);
-    Alert.alert("Sync complete", "All pending logs uploaded and purged locally.");
+    setLastSyncTime(new Date().toLocaleString());
+
+    Alert.alert(
+      "Sync complete",
+      "All pending logs uploaded and purged locally."
+    );
   };
 
   const runMockAuthentication = () => {
@@ -158,6 +164,8 @@ export default function HomeScreen() {
             available.
           </Text>
 
+          <Text style={styles.logText}>Last Sync: {lastSyncTime}</Text>
+
           <View style={styles.logList}>
             <Text style={styles.infoTitle}>Recent Visitor Logs</Text>
 
@@ -193,6 +201,53 @@ export default function HomeScreen() {
     );
   }
 
+  if (screen === "policy") {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Policy Decision Engine</Text>
+
+        <View style={styles.infoBox}>
+          <Text style={styles.infoTitle}>Known Worker</Text>
+          <Text style={styles.infoText}>
+            Action: Mark attendance after successful authentication.
+          </Text>
+        </View>
+
+        <View style={styles.infoBox}>
+          <Text style={styles.infoTitle}>Visitor</Text>
+          <Text style={styles.infoText}>
+            Action: Register visitor, capture purpose, and queue log for sync.
+          </Text>
+        </View>
+
+        <View style={styles.infoBox}>
+          <Text style={styles.infoTitle}>Temporary Worker</Text>
+          <Text style={styles.infoText}>
+            Action: Generate a temporary pass with limited validity.
+          </Text>
+        </View>
+
+        <View style={styles.infoBox}>
+          <Text style={styles.infoTitle}>Rejected User</Text>
+          <Text style={styles.infoText}>
+            Action: Block entry and notify security/admin.
+          </Text>
+        </View>
+
+        <View style={styles.infoBox}>
+          <Text style={styles.infoTitle}>Worker Import</Text>
+          <Text style={styles.infoText}>
+            Action: Await administrator approval before activation.
+          </Text>
+        </View>
+
+        <Pressable style={styles.secondaryButton} onPress={() => setScreen("home")}>
+          <Text style={styles.secondaryButtonText}>Back to Home</Text>
+        </Pressable>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.card}>
@@ -204,13 +259,37 @@ export default function HomeScreen() {
         <View style={styles.infoBox}>
           <Text style={styles.infoTitle}>Current MVP</Text>
           <Text style={styles.infoText}>
-            Frontend flow for face authentication, visitor entry, and offline
-            sync. Real AI recognition and liveness will be connected later.
+            Frontend flow for face authentication, policy decisions, visitor
+            entry, and offline sync. Real AI recognition and liveness will be
+            connected later.
           </Text>
+        </View>
+
+        <View style={styles.dashboardBox}>
+          <Text style={styles.infoTitle}>Dashboard</Text>
+
+          <View style={styles.statRow}>
+            <Text style={styles.statLabel}>Today's Visitors</Text>
+            <Text style={styles.statValue}>{visitorLogs.length}</Text>
+          </View>
+
+          <View style={styles.statRow}>
+            <Text style={styles.statLabel}>Pending Sync Logs</Text>
+            <Text style={styles.statValue}>{pendingLogs}</Text>
+          </View>
+
+          <View style={styles.statRow}>
+            <Text style={styles.statLabel}>Authentication Events</Text>
+            <Text style={styles.statValue}>{authSteps.length > 0 ? 1 : 0}</Text>
+          </View>
         </View>
 
         <Pressable style={styles.primaryButton} onPress={() => setScreen("auth")}>
           <Text style={styles.primaryButtonText}>Face Authentication</Text>
+        </Pressable>
+
+        <Pressable style={styles.primaryButton} onPress={() => setScreen("policy")}>
+          <Text style={styles.primaryButtonText}>Policy Engine</Text>
         </Pressable>
 
         <Pressable style={styles.primaryButton} onPress={() => setScreen("visitor")}>
@@ -222,7 +301,7 @@ export default function HomeScreen() {
         </Pressable>
 
         <Text style={styles.footer}>
-          Person B module: frontend, visitor flow, auth mock, and sync UI.
+          Person B module: frontend, policy, visitor flow, auth mock, and sync UI.
         </Text>
       </View>
     </SafeAreaView>
@@ -261,6 +340,30 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderWidth: 1,
     borderColor: "#1E293B"
+  },
+  dashboardBox: {
+    backgroundColor: "#020617",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#2563EB"
+  },
+  statRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#1E293B"
+  },
+  statLabel: {
+    color: "#CBD5E1",
+    fontSize: 14
+  },
+  statValue: {
+    color: "#38BDF8",
+    fontSize: 16,
+    fontWeight: "800"
   },
   infoTitle: {
     color: "#FFFFFF",
