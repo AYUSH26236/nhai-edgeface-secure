@@ -1,13 +1,13 @@
 import React, {
   useEffect,
   useState,
+  useRef,
 } from 'react';
 
 import {
   View,
   Text,
   StyleSheet,
-  ActivityIndicator,
 } from 'react-native';
 
 import {
@@ -17,108 +17,93 @@ import {
 
 export default function CameraScreen() {
 
-  const frontDevice =
+  const device =
     useCameraDevice('front');
 
-  const backDevice =
-    useCameraDevice('back');
+  const [hasPermission, setHasPermission] =
+    useState(false);
 
-  const device =
-    frontDevice || backDevice;
+  const [faceCount, setFaceCount] =
+    useState(0);
 
-  const [
-    hasPermission,
-    setHasPermission,
-  ] = useState(false);
+  const options = useRef({
+    performanceMode: 'fast',
+    landmarkMode: 'all',
+    contourMode: 'all',
+    classificationMode: 'all',
+  }).current;
 
   useEffect(() => {
 
-    async function getPermission() {
+    async function requestPermission() {
 
       const permission =
         await Camera.requestCameraPermission();
-
-      console.log(
-        'Camera Permission:',
-        permission,
-      );
 
       setHasPermission(
         permission === 'granted',
       );
     }
 
-    getPermission();
+    requestPermission();
 
   }, []);
+
+  function handleFacesDetected(
+    faces: any[],
+  ) {
+
+    setFaceCount(
+      faces.length,
+    );
+
+    console.log(
+      'Faces:',
+      faces.length,
+    );
+  }
 
   if (!hasPermission) {
 
     return (
-
-      <View
-        style={styles.center}
-      >
-
-        <Text
-          style={styles.loading}
-        >
-          Camera permission denied
+      <View style={styles.center}>
+        <Text>
+          Camera Permission Needed
         </Text>
-
       </View>
     );
   }
 
-  if (device == null) {
+  if (!device) {
 
     return (
-
-      <View
-        style={styles.center}
-      >
-
-        <ActivityIndicator
-          size="large"
-          color="#00ff99"
-        />
-
-        <Text
-          style={styles.loading}
-        >
-          No camera device found
+      <View style={styles.center}>
+        <Text>
+          No Camera Found
         </Text>
-
       </View>
     );
   }
 
   return (
-
-    <View
-      style={styles.container}
-    >
+    <View style={styles.container}>
 
       <Camera
-        style={
-          StyleSheet.absoluteFill
-        }
-
+        style={StyleSheet.absoluteFill}
         device={device}
-
         isActive={true}
+        faceDetectionCallback={
+          handleFacesDetected
+        }
+        faceDetectionOptions={
+          options
+        }
       />
 
-      <View
-        style={styles.overlay}
-      >
-
-        <Text
-          style={styles.text}
-        >
-          EDGEFACE LIVE
+      <View style={styles.banner}>
+        <Text style={styles.text}>
+          Faces Detected: {faceCount}
         </Text>
-
       </View>
 
     </View>
@@ -129,62 +114,28 @@ const styles =
   StyleSheet.create({
 
     container: {
-
       flex: 1,
-
-      backgroundColor:
-        '#000',
     },
 
     center: {
-
       flex: 1,
-
-      justifyContent:
-        'center',
-
-      alignItems:
-        'center',
-
-      backgroundColor:
-        '#020b1a',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
 
-    loading: {
-
-      marginTop: 20,
-
-      color: '#ffffff',
-
-      fontSize: 18,
-    },
-
-    overlay: {
-
-      position:
-        'absolute',
-
+    banner: {
+      position: 'absolute',
       top: 60,
-
-      alignSelf:
-        'center',
-
+      alignSelf: 'center',
+      backgroundColor: '#000000AA',
       paddingHorizontal: 20,
-
       paddingVertical: 12,
-
-      borderRadius: 20,
-
-      backgroundColor:
-        'rgba(0,0,0,0.6)',
+      borderRadius: 12,
     },
 
     text: {
-
-      color: '#00ff99',
-
-      fontSize: 20,
-
+      color: '#00FF88',
+      fontSize: 18,
       fontWeight: '700',
     },
   });
