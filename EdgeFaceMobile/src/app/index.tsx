@@ -29,6 +29,10 @@ export default function HomeScreen() {
   const [lastSyncTime, setLastSyncTime] = useState("Never");
   const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>([]);
   const [authSteps, setAuthSteps] = useState<string[]>([]);
+  const [workerId, setWorkerId] = useState("");
+const [confidence, setConfidence] = useState("");
+const [decision, setDecision] = useState("");
+ 
 
   const saveVisitor = () => {
     if (!visitorName.trim()) {
@@ -66,14 +70,18 @@ export default function HomeScreen() {
   };
 
   const runMockAuthentication = () => {
-    setAuthSteps([
-      "Face Detected ✅",
-      "Quality Check Passed ✅",
-      "Liveness Check Passed ✅",
-      "Identity Matched ✅",
-      "Attendance Marked ✅"
-    ]);
-  };
+  setWorkerId("WRK-1024");
+  setConfidence("96%");
+  setDecision("Attendance Marked");
+
+  setAuthSteps([
+    "Face Detected ✅",
+    "Quality Check Passed ✅",
+    "Liveness Check Passed ✅",
+    "Identity Matched ✅",
+    "Attendance Marked ✅"
+  ]);
+};
 
   if (screen === "auth") {
     return (
@@ -93,6 +101,26 @@ export default function HomeScreen() {
         </Pressable>
 
         <View style={styles.logList}>
+          
+{authSteps.length > 0 && (
+  <View style={styles.infoBox}>
+    <Text style={styles.logName}>
+      Worker ID: {workerId}
+    </Text>
+
+    <Text style={styles.logText}>
+      Confidence: {confidence}
+    </Text>
+
+    <Text style={styles.logText}>
+      Mode: Offline
+    </Text>
+
+    <Text style={styles.logText}>
+      Decision: {decision}
+    </Text>
+  </View>
+)}
           {authSteps.length === 0 ? (
             <Text style={styles.infoText}>Waiting for face capture...</Text>
           ) : (
@@ -284,9 +312,15 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <Pressable style={styles.primaryButton} onPress={() => setScreen("auth")}>
-          <Text style={styles.primaryButtonText}>Face Authentication</Text>
-        </Pressable>
+        <Pressable
+  style={styles.primaryButton}
+  onPress={() => {
+    setAuthSteps([]);
+    setScreen("auth");
+  }}
+>
+  <Text style={styles.primaryButtonText}>Face Authentication</Text>
+</Pressable>
 
         <Pressable style={styles.primaryButton} onPress={() => setScreen("policy")}>
           <Text style={styles.primaryButtonText}>Policy Engine</Text>
