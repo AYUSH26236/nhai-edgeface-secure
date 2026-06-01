@@ -1,15 +1,26 @@
 export const THRESHOLDS = {
-
-  MIN_FACE_WIDTH: 100,
-
-  MIN_LIGHTING_SCORE: 0.60,
-
-  MAX_BLUR_SCORE: 0.40,
-
-  EYE_OPEN_THRESHOLD: 0.80,
-
-  SMILE_THRESHOLD: 0.70,
-
-  MATCH_THRESHOLD: 0.85,
-
+  quality: {
+    minBlurScore: 0.6,
+    minLightingScore: 0.5,
+    maxPitchAngle: 20,
+    maxYawAngle: 25,
+    maxRollAngle: 15,
+    minFaceSize: 0.15,
+  },
+  liveness: {
+    blinkEyeOpenThreshold: 0.7,
+    blinkEyeClosedThreshold: 0.3,
+    smileThreshold: 0.7,
+    headTurnYawThreshold: 20,
+    challengeTimeoutMs: 8000,
+  },
+  recognition: {
+    matchThreshold: 0.75,
+    unknownThreshold: 0.55,
+  },
+  pipeline: {
+    frameSkip: 2,
+    stableFramesRequired: 3,
+    authTimeoutMs: 30000,
+  },
 };
