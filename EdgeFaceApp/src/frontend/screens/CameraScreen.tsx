@@ -7,13 +7,14 @@ import React, {
 import {
   View,
   Text,
-  StyleSheet,
+  StyleSheet,tree src
 } from 'react-native';
+
+import { useCameraDevice } from 'react-native-vision-camera';
 
 import {
   Camera,
-  useCameraDevice,
-} from 'react-native-vision-camera';
+} from 'react-native-vision-camera-face-detector';
 
 export default function CameraScreen() {
 

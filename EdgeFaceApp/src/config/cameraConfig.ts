@@ -1,0 +1,9 @@
+export const CAMERA_CONFIG = {
+
+  FPS: 30,
+
+  DETECTION_INTERVAL_MS: 100,
+
+  MIN_FACE_SIZE: 100,
+
+};
