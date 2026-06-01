@@ -32,7 +32,7 @@ export default function HomeScreen() {
   const [workerId, setWorkerId] = useState("");
 const [confidence, setConfidence] = useState("");
 const [decision, setDecision] = useState("");
- 
+ const [capturedAt, setCapturedAt] = useState("");
 
   const saveVisitor = () => {
     if (!visitorName.trim()) {
@@ -73,6 +73,9 @@ const [decision, setDecision] = useState("");
   setWorkerId("WRK-1024");
   setConfidence("96%");
   setDecision("Attendance Marked");
+
+  setCapturedAt(new Date().toLocaleString());
+
 
   setAuthSteps([
     "Face Detected ✅",
@@ -119,8 +122,15 @@ const [decision, setDecision] = useState("");
     <Text style={styles.logText}>
       Decision: {decision}
     </Text>
+
+    <Text style={styles.logText}>
+     Captured At: {capturedAt}
+    </Text>
   </View>
+
+  
 )}
+
           {authSteps.length === 0 ? (
             <Text style={styles.infoText}>Waiting for face capture...</Text>
           ) : (
@@ -315,9 +325,13 @@ const [decision, setDecision] = useState("");
         <Pressable
   style={styles.primaryButton}
   onPress={() => {
-    setAuthSteps([]);
-    setScreen("auth");
-  }}
+  setAuthSteps([]);
+  setWorkerId("");
+  setConfidence("");
+  setDecision("");
+  setCapturedAt("");
+  setScreen("auth");
+}}
 >
   <Text style={styles.primaryButtonText}>Face Authentication</Text>
 </Pressable>

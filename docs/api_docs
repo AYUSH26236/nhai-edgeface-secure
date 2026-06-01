@@ -1,0 +1,161 @@
+# NHAI EdgeFace Secure – API Documentation
+
+## Overview
+
+These APIs represent the planned interfaces between the frontend, AI modules, storage layer, and cloud synchronization services.
+
+---
+
+# 1. Face Authentication API
+
+## Endpoint
+
+```http
+POST /api/recognize
+```
+
+## Request
+
+```json
+{
+  "image": "base64_image_data"
+}
+```
+
+## Response
+
+```json
+{
+  "workerId": "WRK-1024",
+  "confidence": 96,
+  "decision": "Attendance Marked",
+  "timestamp": "2026-05-29T22:45:00Z"
+}
+```
+
+---
+
+# 2. Visitor Registration API
+
+## Endpoint
+
+```http
+POST /api/visitor
+```
+
+## Request
+
+```json
+{
+  "name": "John Doe",
+  "vehicleNumber": "MH12AB1234",
+  "purpose": "Inspection Visit"
+}
+```
+
+## Response
+
+```json
+{
+  "status": "QUEUED_FOR_SYNC",
+  "visitorId": "VIS-1001"
+}
+```
+
+---
+
+# 3. Get Pending Logs
+
+## Endpoint
+
+```http
+GET /api/logs
+```
+
+## Response
+
+```json
+{
+  "pendingLogs": 5,
+  "records": [
+    {
+      "id": "VIS-1001",
+      "status": "QUEUED_FOR_SYNC"
+    }
+  ]
+}
+```
+
+---
+
+# 4. Synchronization API
+
+## Endpoint
+
+```http
+POST /api/sync
+```
+
+## Request
+
+```json
+{
+  "queueSize": 5
+}
+```
+
+## Response
+
+```json
+{
+  "status": "SUCCESS",
+  "uploadedRecords": 5,
+  "purgedRecords": 5
+}
+```
+
+---
+
+# 5. Policy Evaluation API
+
+## Endpoint
+
+```http
+POST /api/policy
+```
+
+## Request
+
+```json
+{
+  "userType": "known_worker"
+}
+```
+
+## Response
+
+```json
+{
+  "action": "MARK_ATTENDANCE"
+}
+```
+
+---
+
+# Supported Policy Types
+
+* known_worker
+* visitor
+* temp_worker
+* reject
+* worker_import
+
+---
+
+# Future APIs
+
+* Face Enrollment API
+* Worker Import API
+* AWS Sync API
+* DataLake Analytics API
+* Admin Dashboard API

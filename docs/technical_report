@@ -1,0 +1,169 @@
+# NHAI EdgeFace Secure – Technical Report
+
+## 1. Project Overview
+
+NHAI EdgeFace Secure is an offline-first authentication and visitor management system designed for DataLake 3.0 environments. The solution enables worker authentication, visitor registration, local event storage, and synchronization with central infrastructure when connectivity becomes available.
+
+The system is designed to operate in low-connectivity environments while maintaining security, traceability, and operational continuity.
+
+---
+
+## 2. Frontend Module
+
+The frontend provides a unified dashboard for authentication, visitor management, policy visualization, and synchronization monitoring.
+
+### Features
+
+* Home Dashboard
+* Face Authentication Screen
+* Visitor Entry Screen
+* Policy Engine Screen
+* Sync Dashboard
+* Offline Status Monitoring
+
+### Technologies
+
+* React Native
+* Expo
+* TypeScript
+
+### Responsibilities
+
+* User interaction
+* Workflow visualization
+* Authentication result display
+* Visitor registration
+* Sync status display
+
+---
+
+## 3. Authentication Module
+
+The authentication module simulates the complete face recognition pipeline.
+
+### Workflow
+
+1. Face Capture
+2. Face Detection
+3. Quality Verification
+4. Liveness Verification
+5. Identity Matching
+6. Attendance Marking
+
+### Displayed Metadata
+
+* Worker ID
+* Confidence Score
+* Authentication Decision
+* Timestamp
+* Offline Mode Status
+
+---
+
+## 4. Policy Engine Module
+
+The Policy Engine determines the action to be performed after authentication.
+
+### Supported Categories
+
+#### Known Worker
+
+* Attendance marked
+* Access granted
+
+#### Visitor
+
+* Visitor registration required
+* Entry logged
+
+#### Temporary Worker
+
+* Temporary access generated
+
+#### Rejected User
+
+* Access denied
+* Security notification triggered
+
+#### Worker Import
+
+* Awaiting administrator approval
+
+---
+
+## 5. Storage Module
+
+The storage layer manages local persistence of events and logs.
+
+### Stored Data
+
+* Visitor Logs
+* Authentication Events
+* Sync Queue Records
+
+### Objectives
+
+* Offline operation
+* Local record retention
+* Queue management
+
+Future versions may use SQLite and SQLCipher for encrypted local storage.
+
+---
+
+## 6. Synchronization Module
+
+The synchronization module transfers locally stored records to the cloud infrastructure.
+
+### Workflow
+
+Local Logs
+→ Sync Queue
+→ AWS Upload
+→ DataLake Update
+→ Local Queue Purge
+
+### Features
+
+* Pending Log Counter
+* Last Sync Timestamp
+* Queue Monitoring
+
+---
+
+## 7. Security Considerations
+
+* Offline-first operation
+* Controlled access policies
+* Identity verification workflow
+* Audit trail generation
+* Future encrypted storage support
+
+---
+
+## 8. Future Scope
+
+### AI Enhancements
+
+* BlazeFace Integration
+* Face Embedding Generation
+* Face Recognition Models
+* Anti-Spoofing Detection
+
+### Storage Enhancements
+
+* SQLite Integration
+* SQLCipher Encryption
+* Secure Key Management
+
+### Cloud Enhancements
+
+* AWS Synchronization
+* DataLake Analytics
+* Centralized Monitoring Dashboard
+
+---
+
+## 9. Conclusion
+
+NHAI EdgeFace Secure demonstrates a complete offline authentication workflow including authentication, policy evaluation, visitor management, local storage, and synchronization readiness. The system provides a scalable foundation for deployment in field environments with intermittent connectivity.

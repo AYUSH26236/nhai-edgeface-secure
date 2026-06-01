@@ -1,0 +1,98 @@
+# NHAI EdgeFace Secure – Workflow
+
+## Overview
+
+The system provides offline-first face authentication and visitor management for NHAI DataLake 3.0 environments.
+
+---
+
+## Worker Authentication Flow
+
+1. User approaches checkpoint
+2. Face image is captured
+3. Face detection module identifies face region
+4. Quality checks are performed
+
+   * Blur check
+   * Lighting check
+   * Face size check
+5. Liveness verification is performed
+6. Face embedding is generated
+7. Identity is matched against enrolled workers
+8. Policy Engine evaluates user category
+9. Attendance is marked for known workers
+10. Event is stored locally
+11. Event is queued for synchronization
+
+---
+
+## Visitor Entry Flow
+
+1. Visitor enters details
+
+   * Name
+   * Vehicle Number
+   * Purpose
+2. Visitor record is created
+3. Record is stored locally
+4. Record is added to sync queue
+5. Record is uploaded to DataLake during synchronization
+
+---
+
+## Policy Engine Flow
+
+Face Authentication
+↓
+Identity Match
+↓
+Policy Evaluation
+↓
+Known Worker / Visitor / Temporary Worker / Rejected User
+↓
+Action Execution
+
+### Known Worker
+
+* Mark attendance
+
+### Visitor
+
+* Create visitor entry
+* Queue for sync
+
+### Temporary Worker
+
+* Generate temporary access
+
+### Rejected User
+
+* Deny access
+* Raise alert
+
+### Worker Import
+
+* Await administrator approval
+
+---
+
+## Synchronization Flow
+
+Local Storage
+↓
+Sync Queue
+↓
+Upload to AWS
+↓
+DataLake Update
+↓
+Local Queue Purge
+
+---
+
+## Offline Mode
+
+* Authentication continues without internet
+* Visitor logs are stored locally
+* Sync queue accumulates pending records
+* Records are uploaded when connectivity returns

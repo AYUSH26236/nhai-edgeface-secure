@@ -1,0 +1,177 @@
+# NHAI EdgeFace Secure – Hackathon Notes
+
+## Demo Flow
+
+### Step 1 – Home Dashboard
+
+Show:
+
+* Today's Visitors
+* Pending Sync Logs
+* Authentication Events
+
+Explain:
+
+"The dashboard provides a quick overview of system activity and offline synchronization status."
+
+---
+
+### Step 2 – Face Authentication
+
+Open:
+
+Face Authentication
+
+Click:
+
+Capture Face
+
+Show:
+
+* Worker ID
+* Confidence Score
+* Decision
+* Timestamp
+* Authentication Pipeline
+
+Explain:
+
+"This simulates the offline authentication workflow. The final version will integrate BlazeFace, liveness verification, and face recognition."
+
+---
+
+### Step 3 – Policy Engine
+
+Open:
+
+Policy Engine
+
+Show:
+
+* Known Worker
+* Visitor
+* Temporary Worker
+* Rejected User
+* Worker Import
+
+Explain:
+
+"The policy layer converts recognition results into business actions."
+
+---
+
+### Step 4 – Visitor Entry
+
+Open:
+
+Visitor Entry
+
+Enter:
+
+* Name
+* Vehicle Number
+* Purpose
+
+Click:
+
+Save Visitor Log
+
+Explain:
+
+"Visitor records are stored locally and queued for synchronization."
+
+---
+
+### Step 5 – Sync Dashboard
+
+Open:
+
+Sync Status
+
+Show:
+
+* Pending Logs
+* Last Sync Time
+* Recent Visitor Logs
+
+Click:
+
+Simulate Upload & Purge
+
+Explain:
+
+"When connectivity becomes available, queued records are uploaded and removed from local storage."
+
+---
+
+# Team Responsibilities
+
+## Person A
+
+* Face Detection
+* Face Recognition
+* Liveness Detection
+* AI Integration
+
+## Person B
+
+* Frontend Dashboard
+* Authentication UI
+* Policy Engine UI
+* Visitor Management
+* Offline Queue Monitoring
+* Sync Dashboard
+* Documentation
+
+---
+
+# Known Limitations
+
+Current MVP uses:
+
+* Mock authentication
+* Mock policy decisions
+* Simulated synchronization
+
+Planned integrations:
+
+* BlazeFace
+* Real embeddings
+* SQLite
+* SQLCipher
+* AWS DataLake
+
+---
+
+# Judge Questions
+
+### Why Offline First?
+
+Many deployment locations have intermittent connectivity. The system must continue operating without internet access.
+
+### Why Policy Engine?
+
+Authentication only identifies users. Policy determines the action to be taken.
+
+### Why Local Storage?
+
+Records must be retained until synchronization becomes available.
+
+### Why Sync Queue?
+
+Ensures no data loss during connectivity interruptions.
+
+---
+
+# Submission Checklist
+
+* Frontend Tested
+* Authentication Tested
+* Policy Engine Tested
+* Visitor Flow Tested
+* Sync Dashboard Tested
+* Screenshots Captured
+* Technical Report Completed
+* API Documentation Completed
+* Workflow Documentation Completed
+* Git Repository Updated
