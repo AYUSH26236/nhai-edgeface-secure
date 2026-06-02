@@ -1,0 +1,83 @@
+# NHAI EdgeFace Secure – Demo Script
+
+## 1. Introduction
+
+Hello, we are presenting NHAI EdgeFace Secure, an offline-first facial authentication and visitor management system designed for NHAI DataLake 3.0 field environments.
+
+The system is built for remote highways, tunnels, and construction sites where internet connectivity may not be reliable.
+
+---
+
+## 2. Home Dashboard
+
+This dashboard shows:
+
+- Today's Visitors
+- Pending Sync Logs
+- Authentication Events
+
+It gives the supervisor a quick view of site activity.
+
+---
+
+## 3. Face Authentication
+
+In the Face Authentication screen, we simulate the EdgeFace pipeline.
+
+The system shows:
+
+- Worker ID
+- Confidence Score
+- Offline Mode
+- Final Decision
+- Captured Timestamp
+
+The authentication pipeline includes face detection, quality check, liveness verification, identity match, and attendance marking.
+
+---
+
+## 4. Policy Engine
+
+The Policy Engine converts authentication results into actions.
+
+For example:
+
+- Known Worker → Mark Attendance
+- Visitor → Register Visitor
+- Temporary Worker → Generate Temporary Pass
+- Rejected User → Block Entry
+- Worker Import → Await Admin Approval
+
+---
+
+## 5. Visitor Entry
+
+In Visitor Entry, the supervisor enters:
+
+- Visitor Name
+- Vehicle Number
+- Purpose
+
+The record is stored locally and added to the pending sync queue.
+
+---
+
+## 6. Sync Dashboard
+
+The Sync Dashboard shows:
+
+- Pending Logs
+- Last Sync Time
+- Recent Visitor Logs
+
+When internet becomes available, records can be uploaded to AWS/DataLake and purged from the local queue.
+
+---
+
+## 7. Conclusion
+
+This MVP demonstrates the complete offline-first workflow:
+
+Face Authentication → Policy Decision → Visitor/Attendance Logging → Local Queue → Sync Readiness.
+
+Future integration will connect real BlazeFace detection, liveness detection, MobileFaceNet recognition, SQLite/SQLCipher storage, and AWS/DataLake synchronization.
