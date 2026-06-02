@@ -1,31 +1,11 @@
-export type ApprovalState =
+export type EnrollmentStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED';
 
- | "PENDING"
-
- | "APPROVED"
-
- | "REJECTED";
-
-export type EnrollmentSource =
-
- | "LOCAL"
-
- | "DATALAKE"
-
- | "IMPORT";
-
-export interface Enrollment {
-
- workerId:string;
-
- approvalState: ApprovalState;
-
- source: EnrollmentSource;
-
- supervisorId?:string;
-
- enrollmentTime:string;
-
- operatorId:string;
-
+export interface EnrollmentRequest {
+  id: string;
+  name: string;
+  createdAt: number;
+  status: EnrollmentStatus;
+  embedding: number[];
+  photoUri?: string;
+  isVisitor: boolean;
 }

@@ -1,16 +1,7 @@
+export type LivenessChallenge = 'BLINK' | 'SMILE' | 'TURN_LEFT' | 'TURN_RIGHT';
+
 export interface LivenessResult {
-
- blinkPass:boolean;
-
- smilePass:boolean;
-
- headTurnPass:boolean;
-
- challengePass:boolean;
-
- challengeType:string;
-
- duration:number;
-
+  passed: boolean;
+  challengesPassed: LivenessChallenge[];
+  spoofDetected: boolean;
 }
-

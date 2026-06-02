@@ -5,17 +5,12 @@ export type WorkerStatus =
   | "PENDING";
 
 export interface Worker {
-
-  workerId: string;
-
+  id: string;
   name: string;
-
-  role: string;
-
-  site: string;
-
-  status: WorkerStatus;
-
-  embeddingId?: string;
-
+  designation: string;
+  department: string;
+  enrolledAt: number;
+  embedding: number[];
+  photoUri?: string;
+  syncStatus: 'LOCAL' | 'SYNCED' | 'PENDING';
 }

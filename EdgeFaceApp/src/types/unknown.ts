@@ -1,21 +1,5 @@
-export type UnknownMode =
-
- | "REJECT"
-
- | "TEMP"
-
- | "VISITOR"
-
- | "IMPORT";
-
-export interface UnknownDecision {
-
- mode: UnknownMode;
-
- approvalRequired:boolean;
-
- operatorId:string;
-
- reason:string;
-
-}
+export type UnknownUserAction =
+  | 'ENROLL_TEMP'
+  | 'VISITOR_MODE'
+  | 'SEARCH_DATALAKE'
+  | 'DENY';
