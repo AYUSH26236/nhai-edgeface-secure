@@ -1,54 +1,43 @@
-import { AuthResult } from '../types/auth';
+// EdgeFace / MobileFaceNet integration layer
+// V1: uses cosine similarity with mock embeddings
+// V2: replace extractEmbedding with real TFLite inference
+
 import { Worker } from '../types/worker';
-import { SyncResult } from '../types/sync';
+import { RecognitionResult } from '../types/recognition';
+import { matchEmbedding, cosineSimilarity } from './recognitionService';
+import { getAllWorkers } from './workerStore';
 
-export class EdgeFaceService {
+// V2: load TFLite model and run inference on face crop
+// import { runModel } from './tfliteRunner';
 
-  async authenticate(
-    _image: string
-  ): Promise<AuthResult> {
+export async function extractFaceEmbedding(_faceImageBase64: string): Promise<number[]> {
+  // TODO V2: return await runModel(_faceImageBase64);
+  // V1: return normalized random vector (demo only)
+  const dim = 128;
+  const raw = Array.from({ length: dim }, () => Math.random() * 2 - 1);
+  const norm = Math.sqrt(raw.reduce((s, v) => s + v * v, 0));
+  return raw.map(v => v / norm);
+}
 
-    console.log('Starting authentication');
+export async function recognizeFace(faceImageBase64: string): Promise<RecognitionResult> {
+  const embedding = await extractFaceEmbedding(faceImageBase64);
+  const workers = getAllWorkers();
+  return matchEmbedding(embedding, workers);
+}
 
-    return {
+export async function enrollFace(
+  images: string[],
+  worker: Worker,
+): Promise<number[]> {
+  // Average embeddings from multiple enrollment images for robustness
+  const embeddings = await Promise.all(images.map(extractFaceEmbedding));
+  const avg = embeddings[0].map((_, i) =>
+    embeddings.reduce((sum, e) => sum + e[i], 0) / embeddings.length
+  );
+  const norm = Math.sqrt(avg.reduce((s, v) => s + v * v, 0));
+  return avg.map(v => v / norm);
+}
 
-      success: false,
-
-      state: 'unknown',
-
-      confidence: 0,
-
-      workerId: undefined,
-
-      message: 'No match found',
-
-    };
-  }
-
-  async enrollWorker(
-    _images: string[],
-    worker: Worker
-  ): Promise<void> {
-
-    console.log(
-      'Enrollment pending',
-      worker
-    );
-  }
-
-  async syncToAWS():
-    Promise<SyncResult> {
-
-    return {
-
-      uploaded: 0,
-
-      purged: 0,
-
-      pending: 0,
-
-      success: false,
-
-    };
-  }
+export function embeddingSimilarity(a: number[], b: number[]): number {
+  return cosineSimilarity(a, b);
 }

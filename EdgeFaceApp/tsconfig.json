@@ -2,13 +2,9 @@
   "extends": "@react-native/typescript-config",
   "compilerOptions": {
     "strict": false,
-    "jsx": "react-jsx",
-    "lib": ["ES2019", "DOM"],
-    "types": ["jest", "react", "react-native"],
-    "moduleResolution": "node",
+    "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "allowSyntheticDefaultImports": true
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["**/node_modules", "**/Pods"]

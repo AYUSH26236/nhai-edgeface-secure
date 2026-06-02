@@ -1,30 +1,33 @@
-import {
- RecoveryResult
+import { getAllLogs } from './auditService';
+import { getAllWorkers } from './workerStore';
+import { getSyncStatus } from './syncService';
+
+export interface SystemHealth {
+  workerCount: number;
+  pendingLogs: number;
+  isOnline: boolean;
+  lastSyncAt?: number;
+  status: 'HEALTHY' | 'DEGRADED' | 'OFFLINE';
 }
-from "../types/recovery";
 
-export class RecoveryService {
+export function getSystemHealth(): SystemHealth {
+  const sync = getSyncStatus();
+  const workerCount = getAllWorkers().length;
+  const pendingLogs = sync.pendingLogs;
 
- async recover(
-  _images:string[]
- ):Promise<RecoveryResult>{
+  let status: SystemHealth['status'] = 'HEALTHY';
+  if (!sync.isOnline) status = 'OFFLINE';
+  else if (pendingLogs > 100) status = 'DEGRADED';
 
   return {
-
-   partialMatchUsed:false,
-
-   fullVectorFallback:false,
-
-   eyesScore:0,
-
-   noseScore:0,
-
-   mouthScore:0,
-
-   finalConfidence:0
-
+    workerCount,
+    pendingLogs,
+    isOnline: sync.isOnline,
+    lastSyncAt: sync.lastSyncAt,
+    status,
   };
+}
 
- }
-
+export function exportLogsAsJSON(): string {
+  return JSON.stringify(getAllLogs(), null, 2);
 }
