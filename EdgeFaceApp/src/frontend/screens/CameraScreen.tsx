@@ -5,7 +5,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  Camera, useCameraDevice, useCameraFormat, useCameraPermission,
+  Camera, useCameraDevice, useCameraFormat, 
+  useCameraPermission, useFrameProcessor,
 } from 'react-native-vision-camera';
 import { useFaceDetector } from 'react-native-vision-camera-face-detector';
 import { Worklets } from 'react-native-worklets-core';
