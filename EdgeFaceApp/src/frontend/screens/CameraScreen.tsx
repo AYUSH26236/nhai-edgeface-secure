@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  Camera, useCameraDevice, useCameraFormat, 
+  Camera, useCameraDevice, useCameraFormat,
   useCameraPermission, useFrameProcessor,
 } from 'react-native-vision-camera';
 import { useFaceDetector } from 'react-native-vision-camera-face-detector';
@@ -33,6 +33,7 @@ export default function CameraScreen() {
   const { pipelineState, processFrame, reset } = usePipeline();
   const [faces, setFaces] = useState<DetectedFace[]>([]);
   const [unknownVisible, setUnknownVisible] = useState(false);
+  const [frameDims, setFrameDims] = useState({ width: 1080, height: 1920 });
 
   useEffect(() => {
     if (!hasPermission) requestPermission();
@@ -56,11 +57,16 @@ export default function CameraScreen() {
     processFrame(parsed);
   });
 
+  const handleFrameDims = Worklets.createRunOnJS((w: number, h: number) => {
+    setFrameDims(prev => (prev.width === w && prev.height === h ? prev : { width: w, height: h }));
+  });
+
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet';
     const detected = detectFaces(frame);
     handleFacesJS(detected);
-  }, [handleFacesJS]);
+    handleFrameDims(frame.width, frame.height);
+  }, [handleFacesJS, handleFrameDims]);
 
   const handleUnknownAction = useCallback((action: UnknownUserAction) => {
     setUnknownVisible(false);
@@ -108,10 +114,14 @@ export default function CameraScreen() {
       />
 
       <GuideFrame authState={authState} />
-      <FaceBox faces={faces} authState={authState} />
+      <FaceBox
+        faces={faces}
+        authState={authState}
+        frameWidth={frameDims.width}
+        frameHeight={frameDims.height}
+      />
       {quality && <QualityOverlay quality={quality} />}
 
-      {/* Top HUD */}
       <View style={s.topHud}>
         <View style={s.badge}>
           <Text style={s.badgeText}>NHAI EdgeFace</Text>
@@ -123,7 +133,6 @@ export default function CameraScreen() {
         )}
       </View>
 
-      {/* Liveness */}
       {authState === 'LIVENESS_CHALLENGE' && livenessChallenge && (
         <View style={s.livenessBox}>
           <Text style={s.livenessEmoji}>
@@ -138,7 +147,6 @@ export default function CameraScreen() {
         </View>
       )}
 
-      {/* Bottom status */}
       <View style={s.bottomHud}>
         <StatusBanner
           authState={authState}
