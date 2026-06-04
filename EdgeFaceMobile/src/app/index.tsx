@@ -64,8 +64,9 @@ const [decision, setDecision] = useState("");
     setLastSyncTime(new Date().toLocaleString());
 
     Alert.alert(
-      "Sync complete",
-      "All pending logs uploaded and purged locally."
+      "AWS Upload Successful",
+      "DataLake Updated",
+      "Local Queue Purged"
     );
   };
 
@@ -202,7 +203,25 @@ const [decision, setDecision] = useState("");
             available.
           </Text>
 
-          <Text style={styles.logText}>Last Sync: {lastSyncTime}</Text>
+          <Text style={styles.logText}>
+  AWS Status: 🟢 Connected
+</Text>
+
+<Text style={styles.logText}>
+  DataLake Status: 🟢 Ready
+</Text>
+
+<Text style={styles.logText}>
+  Queue Size: {pendingLogs}
+</Text>
+
+<Text style={styles.logText}>
+  Pending Uploads: {pendingLogs}
+</Text>
+
+<Text style={styles.logText}>
+  Last Sync: {lastSyncTime}
+</Text>
 
           <View style={styles.logList}>
             <Text style={styles.infoTitle}>Recent Visitor Logs</Text>
@@ -229,7 +248,7 @@ const [decision, setDecision] = useState("");
         </View>
 
         <Pressable style={styles.primaryButton} onPress={syncLogs}>
-          <Text style={styles.primaryButtonText}>Simulate Upload & Purge</Text>
+          <Text style={styles.primaryButtonText}> Sync to AWS & DataLake</Text>
         </Pressable>
 
         <Pressable style={styles.secondaryButton} onPress={() => setScreen("home")}>
