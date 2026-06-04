@@ -1,34 +1,17 @@
+import { Camera } from 'react-native-vision-camera';
+
 export interface CameraFrame {
-
- image:string;
-
- timestamp:string;
-
- width:number;
-
- height:number;
-
+  image: string;
+  timestamp: number;
+  width: number;
+  height: number;
 }
 
-export class CameraService {
+export async function requestCameraPermission(): Promise<boolean> {
+  const status = await Camera.requestCameraPermission();
+  return status === 'granted';
+}
 
- async capture():
- Promise<CameraFrame>{
-
-  return {
-
-   image:"",
-
-   timestamp:
-    new Date()
-    .toISOString(),
-
-   width:0,
-
-   height:0
-
-  };
-
- }
-
+export async function getCameraPermissionStatus(): Promise<string> {
+  return await Camera.getCameraPermissionStatus();
 }

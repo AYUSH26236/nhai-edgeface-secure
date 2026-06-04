@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Alert, Linking, SafeAreaView, StyleSheet,
+  Alert, Linking, StyleSheet,
   Text, TouchableOpacity, View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  Camera, useCameraDevice, useCameraPermission, useFrameProcessor,
+  Camera, useCameraDevice, useCameraFormat,
+  useCameraPermission, useFrameProcessor,
 } from 'react-native-vision-camera';
 import { useFaceDetector } from 'react-native-vision-camera-face-detector';
 import { Worklets } from 'react-native-worklets-core';
@@ -24,9 +26,14 @@ import { logEvent } from '../../services/auditService';
 export default function CameraScreen() {
   const { hasPermission, requestPermission } = useCameraPermission();
   const device = useCameraDevice(CAMERA_CONFIG.position);
+  const format = useCameraFormat(device, [
+    { fps: 30 },
+    { videoResolution: { width: 720, height: 1280 } },
+  ]);
   const { pipelineState, processFrame, reset } = usePipeline();
   const [faces, setFaces] = useState<DetectedFace[]>([]);
   const [unknownVisible, setUnknownVisible] = useState(false);
+  const [frameDims, setFrameDims] = useState({ width: 1080, height: 1920 });
 
   useEffect(() => {
     if (!hasPermission) requestPermission();
@@ -44,17 +51,22 @@ export default function CameraScreen() {
     minFaceSize: CAMERA_CONFIG.faceDetection.minFaceSize,
   });
 
-  const handleFacesJS = Worklets.createRunInJsFn((rawFaces: any[]) => {
+  const handleFacesJS = Worklets.createRunOnJS((rawFaces: any[]) => {
     const parsed = parseFaces(rawFaces);
     setFaces(parsed);
     processFrame(parsed);
+  });
+
+  const handleFrameDims = Worklets.createRunOnJS((w: number, h: number) => {
+    setFrameDims(prev => (prev.width === w && prev.height === h ? prev : { width: w, height: h }));
   });
 
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet';
     const detected = detectFaces(frame);
     handleFacesJS(detected);
-  }, [handleFacesJS]);
+    handleFrameDims(frame.width, frame.height);
+  }, [handleFacesJS, handleFrameDims]);
 
   const handleUnknownAction = useCallback((action: UnknownUserAction) => {
     setUnknownVisible(false);
@@ -97,17 +109,23 @@ export default function CameraScreen() {
         style={StyleSheet.absoluteFill}
         device={device}
         isActive
+        format={format}
         frameProcessor={frameProcessor}
-        fps={CAMERA_CONFIG.fps}
       />
 
       <GuideFrame authState={authState} />
-      <FaceBox faces={faces} authState={authState} />
+      <FaceBox
+        faces={faces}
+        authState={authState}
+        frameWidth={frameDims.width}
+        frameHeight={frameDims.height}
+      />
       {quality && <QualityOverlay quality={quality} />}
 
-      {/* Top HUD */}
       <View style={s.topHud}>
-        <View style={s.badge}><Text style={s.badgeText}>NHAI EdgeFace</Text></View>
+        <View style={s.badge}>
+          <Text style={s.badgeText}>NHAI EdgeFace</Text>
+        </View>
         {faceCount > 0 && (
           <View style={s.faceTag}>
             <Text style={s.faceTagText}>{faceCount} face{faceCount > 1 ? 's' : ''}</Text>
@@ -115,11 +133,12 @@ export default function CameraScreen() {
         )}
       </View>
 
-      {/* Liveness challenge instruction */}
       {authState === 'LIVENESS_CHALLENGE' && livenessChallenge && (
         <View style={s.livenessBox}>
           <Text style={s.livenessEmoji}>
-            {livenessChallenge === 'BLINK' ? '👁️' : livenessChallenge === 'SMILE' ? '😊' : livenessChallenge === 'TURN_LEFT' ? '⬅️' : '➡️'}
+            {livenessChallenge === 'BLINK' ? '👁️'
+              : livenessChallenge === 'SMILE' ? '😊'
+              : livenessChallenge === 'TURN_LEFT' ? '⬅️' : '➡️'}
           </Text>
           <Text style={s.livenessText}>{livenesChallengeInstruction}</Text>
           <View style={s.progressBar}>
@@ -128,16 +147,12 @@ export default function CameraScreen() {
         </View>
       )}
 
-      {/* Bottom status */}
       <View style={s.bottomHud}>
         <StatusBanner
           authState={authState}
           message={statusMessage}
           workerName={recognition?.matched ? recognition.workerName : undefined}
         />
-        {__DEV__ && recognition && (
-          <Text style={s.debug}>Confidence: {(recognition.confidence * 100).toFixed(1)}%</Text>
-        )}
         {(authState === 'AUTHENTICATED' || authState === 'REJECTED') && (
           <TouchableOpacity style={s.resetBtn} onPress={reset}>
             <Text style={s.resetText}>Scan Again</Text>
@@ -167,7 +182,6 @@ const s = StyleSheet.create({
   progressBar: { width: 160, height: 6, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 3, overflow: 'hidden' },
   progressFill: { height: '100%', backgroundColor: '#FFD60A', borderRadius: 3 },
   bottomHud: { position: 'absolute', bottom: 40, left: 0, right: 0, alignItems: 'center', gap: 12 },
-  debug: { color: 'rgba(255,255,255,0.4)', fontSize: 12 },
   resetBtn: { backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 24, paddingVertical: 10, borderRadius: 10, borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
   resetText: { color: '#FFF', fontWeight: '600', fontSize: 15 },
 });
